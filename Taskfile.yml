@@ -51,6 +51,7 @@ tasks:
           find {{.ITEM}} -type f | while read f; do
             target="$HOME/${f#{{.ITEM}}/}";
             [ -f "$target" ] && [ ! -L "$target" ] && rm "$target";
+            [ -L "$target" ] && [ ! -e "$target" ] && rm "$target";
           done; true
 
   dotfiles:uninstall:
@@ -59,6 +60,7 @@ tasks:
     cmds:
       - for: { var: PACKAGES }
         cmd: stow -t $HOME -D {{.ITEM}}
+      - stow -t "{{.VSCODE_DIR}}" -D vscode
 
   dotfiles:reinstall:
     desc: Restow (after adding files)
@@ -66,19 +68,32 @@ tasks:
     cmds:
       - for: { var: PACKAGES }
         cmd: stow -t $HOME -R {{.ITEM}}
+      - stow -t "{{.VSCODE_DIR}}" -R vscode
 
   vscode:install:
-    desc: Symlink VS Code settings
+    desc: Symlink VS Code settings via stow
+    dir: "{{.DOTFILES_DIR}}"
     cmds:
       - mkdir -p "{{.VSCODE_DIR}}"
-      - ln -sf "{{.DOTFILES_DIR}}/vscode/settings.json" "{{.VSCODE_DIR}}/settings.json"
-      - ln -sf "{{.DOTFILES_DIR}}/vscode/keybindings.json" "{{.VSCODE_DIR}}/keybindings.json"
+      - task: vscode:clean
+      - stow -t "{{.VSCODE_DIR}}" vscode
+
+  vscode:clean:
+    desc: Remove existing files that would conflict with stow
+    internal: true
+    cmds:
+      - >-
+        find vscode -type f | while read f; do
+          target="{{.VSCODE_DIR}}/${f#vscode/}";
+          [ -f "$target" ] && [ ! -L "$target" ] && rm "$target";
+          [ -L "$target" ] && [ ! -e "$target" ] && rm "$target";
+        done; true
 
   vscode:uninstall:
     desc: Remove VS Code symlinks
+    dir: "{{.DOTFILES_DIR}}"
     cmds:
-      - rm -f "{{.VSCODE_DIR}}/settings.json"
-      - rm -f "{{.VSCODE_DIR}}/keybindings.json"
+      - stow -t "{{.VSCODE_DIR}}" -D vscode
 
   devbox:install:
     desc: Install global Devbox packages
@@ -115,4 +130,3 @@ tasks:
     cmds:
       - git pull
       - task: dotfiles:reinstall
-      - task: vscode:install
