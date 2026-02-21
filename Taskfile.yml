@@ -4,6 +4,7 @@ vars:
   PACKAGES: fish git kitty devbox
   DOTFILES_DIR: "{{.ROOT_DIR}}"
   VSCODE_DIR: '{{if eq OS "darwin"}}{{.HOME}}/Library/Application Support/Code/User{{else}}{{.HOME}}/.config/Code/User{{end}}'
+  UV_TOOLS: harlequin
 
 tasks:
   bootstrap:
@@ -12,6 +13,7 @@ tasks:
       - task: bootstrap:deps
       - task: dotfiles:install
       - task: vscode:install
+      - task: uv:tools
 
   bootstrap:deps:
     desc: Install core dependencies
@@ -64,6 +66,12 @@ tasks:
     cmds:
       - rm -f "{{.VSCODE_DIR}}/settings.json"
       - rm -f "{{.VSCODE_DIR}}/keybindings.json"
+
+  uv:tools:
+    desc: Install global Python CLI tools via uv
+    cmds:
+      - for: { var: UV_TOOLS }
+        cmd: uv tool install {{.ITEM}}
 
   fish:reload:
     desc: Reload fish config

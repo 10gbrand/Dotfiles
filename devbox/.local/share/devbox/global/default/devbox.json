@@ -1,7 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.7/.schema/devbox.schema.json",
   "packages": [
-    "go-task@latest"
+    "go-task@latest",
+    "uv@latest",
+    "fzf@latest",
+    "tree@latest",
+    "yazi@latest"
   ],
   "shell": {
     "init_hook": [],
