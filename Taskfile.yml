@@ -1,0 +1,62 @@
+version: "3"
+
+vars:
+  PACKAGES: fish git kitty devbox
+  DOTFILES_DIR: "{{.ROOT_DIR}}"
+
+tasks:
+  bootstrap:
+    desc: Full setup on a new machine
+    cmds:
+      - task: bootstrap:deps
+      - task: dotfiles:install
+
+  bootstrap:deps:
+    desc: Install core dependencies
+    cmds:
+      - task: bootstrap:deps:{{if eq OS "darwin"}}mac{{else}}linux{{end}}
+    status:
+      - command -v stow
+      - command -v fish
+
+  bootstrap:deps:mac:
+    internal: true
+    cmds:
+      - brew install stow fish kitty
+
+  bootstrap:deps:linux:
+    internal: true
+    cmds:
+      - sudo apt update && sudo apt install -y stow fish
+
+  dotfiles:install:
+    desc: Symlink all dotfiles
+    dir: "{{.DOTFILES_DIR}}"
+    cmds:
+      - for: { var: PACKAGES }
+        cmd: stow {{.ITEM}}
+
+  dotfiles:uninstall:
+    desc: Remove all symlinks
+    dir: "{{.DOTFILES_DIR}}"
+    cmds:
+      - for: { var: PACKAGES }
+        cmd: stow -D {{.ITEM}}
+
+  dotfiles:reinstall:
+    desc: Restow (after adding files)
+    dir: "{{.DOTFILES_DIR}}"
+    cmds:
+      - for: { var: PACKAGES }
+        cmd: stow -R {{.ITEM}}
+
+  fish:reload:
+    desc: Reload fish config
+    cmds:
+      - fish -c "source ~/.config/fish/config.fish"
+
+  update:
+    desc: Git pull + restow
+    cmds:
+      - git pull
+      - task: dotfiles:reinstall

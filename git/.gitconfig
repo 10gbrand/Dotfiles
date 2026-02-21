@@ -1,0 +1,13 @@
+[user]
+	email = 10gbrand@users.noreply.github.com
+	name = Mattias Tengbrand
+[core]
+	autocrlf = input
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+[http]
+	postBuffer = 157286400
