@@ -7,6 +7,12 @@ if test "$IS_MAC" = 1; and test -d /opt/homebrew
     eval (/opt/homebrew/bin/brew shellenv)
 end
 
+# Devbox global
+set -l devbox_bin "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default/bin"
+if test -d $devbox_bin
+    fish_add_path $devbox_bin
+end
+
 # Default editor
 set -gx EDITOR "code --wait"
 set -gx VISUAL "code --wait"

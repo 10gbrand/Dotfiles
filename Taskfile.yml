@@ -13,6 +13,7 @@ tasks:
       - task: bootstrap:deps
       - task: dotfiles:install
       - task: vscode:install
+      - task: devbox:install
       - task: uv:tools
 
   bootstrap:deps:
@@ -37,22 +38,34 @@ tasks:
     desc: Symlink all dotfiles
     dir: "{{.DOTFILES_DIR}}"
     cmds:
+      - task: dotfiles:clean
       - for: { var: PACKAGES }
-        cmd: stow {{.ITEM}}
+        cmd: stow -t $HOME {{.ITEM}}
+
+  dotfiles:clean:
+    desc: Remove existing files that would conflict with stow
+    internal: true
+    cmds:
+      - for: { var: PACKAGES }
+        cmd: >-
+          find {{.ITEM}} -type f | while read f; do
+            target="$HOME/${f#{{.ITEM}}/}";
+            [ -f "$target" ] && [ ! -L "$target" ] && rm "$target";
+          done; true
 
   dotfiles:uninstall:
     desc: Remove all symlinks
     dir: "{{.DOTFILES_DIR}}"
     cmds:
       - for: { var: PACKAGES }
-        cmd: stow -D {{.ITEM}}
+        cmd: stow -t $HOME -D {{.ITEM}}
 
   dotfiles:reinstall:
     desc: Restow (after adding files)
     dir: "{{.DOTFILES_DIR}}"
     cmds:
       - for: { var: PACKAGES }
-        cmd: stow -R {{.ITEM}}
+        cmd: stow -t $HOME -R {{.ITEM}}
 
   vscode:install:
     desc: Symlink VS Code settings
@@ -67,11 +80,30 @@ tasks:
       - rm -f "{{.VSCODE_DIR}}/settings.json"
       - rm -f "{{.VSCODE_DIR}}/keybindings.json"
 
+  devbox:install:
+    desc: Install global Devbox packages
+    cmds:
+      - devbox global install
+
   uv:tools:
     desc: Install global Python CLI tools via uv
     cmds:
       - for: { var: UV_TOOLS }
         cmd: uv tool install {{.ITEM}}
+
+  uv:tools:uninstall:
+    desc: Uninstall all managed UV tools
+    cmds:
+      - for: { var: UV_TOOLS }
+        cmd: uv tool uninstall {{.ITEM}}
+
+  uninstall:
+    desc: Remove everything (symlinks, VS Code, UV tools)
+    deps: [bootstrap:deps]
+    cmds:
+      - task: dotfiles:uninstall
+      - task: vscode:uninstall
+      - task: uv:tools:uninstall
 
   fish:reload:
     desc: Reload fish config
