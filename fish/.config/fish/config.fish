@@ -7,6 +7,10 @@ if test "$IS_MAC" = 1; and test -d /opt/homebrew
     eval (/opt/homebrew/bin/brew shellenv)
 end
 
+# Default editor
+set -gx EDITOR "code --wait"
+set -gx VISUAL "code --wait"
+
 # Abbreviations
 abbr -a -- ll 'ls -la'
 abbr -a -- la 'ls -a'

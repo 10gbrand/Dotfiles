@@ -3,6 +3,7 @@ version: "3"
 vars:
   PACKAGES: fish git kitty devbox
   DOTFILES_DIR: "{{.ROOT_DIR}}"
+  VSCODE_DIR: '{{if eq OS "darwin"}}{{.HOME}}/Library/Application Support/Code/User{{else}}{{.HOME}}/.config/Code/User{{end}}'
 
 tasks:
   bootstrap:
@@ -10,6 +11,7 @@ tasks:
     cmds:
       - task: bootstrap:deps
       - task: dotfiles:install
+      - task: vscode:install
 
   bootstrap:deps:
     desc: Install core dependencies
@@ -50,6 +52,19 @@ tasks:
       - for: { var: PACKAGES }
         cmd: stow -R {{.ITEM}}
 
+  vscode:install:
+    desc: Symlink VS Code settings
+    cmds:
+      - mkdir -p "{{.VSCODE_DIR}}"
+      - ln -sf "{{.DOTFILES_DIR}}/vscode/settings.json" "{{.VSCODE_DIR}}/settings.json"
+      - ln -sf "{{.DOTFILES_DIR}}/vscode/keybindings.json" "{{.VSCODE_DIR}}/keybindings.json"
+
+  vscode:uninstall:
+    desc: Remove VS Code symlinks
+    cmds:
+      - rm -f "{{.VSCODE_DIR}}/settings.json"
+      - rm -f "{{.VSCODE_DIR}}/keybindings.json"
+
   fish:reload:
     desc: Reload fish config
     cmds:
@@ -60,3 +75,4 @@ tasks:
     cmds:
       - git pull
       - task: dotfiles:reinstall
+      - task: vscode:install

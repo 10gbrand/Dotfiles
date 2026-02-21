@@ -12,6 +12,7 @@ Works on **macOS (Apple Silicon)** and **Windows (WSL2)**.
 | `kitty` | Kitty terminal with Catppuccin Macchiato theme |
 | `git` | Global git config with sensible defaults |
 | `devbox` | Global Devbox packages (dev tools managed via Nix) |
+| `vscode` | VS Code settings and keybindings (symlinked per OS) |
 
 ## Quick start
 
@@ -60,6 +61,8 @@ Run `task` or `task --list` to see all commands:
 | `task dotfiles:install` | Symlink all dotfiles |
 | `task dotfiles:uninstall` | Remove all symlinks |
 | `task dotfiles:reinstall` | Restow (after adding files) |
+| `task vscode:install` | Symlink VS Code settings |
+| `task vscode:uninstall` | Remove VS Code symlinks |
 | `task fish:reload` | Reload fish config |
 | `task update` | Git pull + restow |
 
@@ -84,6 +87,7 @@ This setup assumes the following toolchain:
 
 - **[Fish](https://fishshell.com/)** – Shell
 - **[Kitty](https://sw.kovidgoyal.net/kitty/)** – Terminal
+- **[VS Code](https://code.visualstudio.com/)** – Editor (default `$EDITOR`)
 - **[Devbox](https://www.jetify.com/devbox)** – Development environments
 - **[UV](https://docs.astral.sh/uv/)** – Python project management
 - **[Go-Task](https://taskfile.dev/)** – Task runner
