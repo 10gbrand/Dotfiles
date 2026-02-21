@@ -13,6 +13,8 @@
   "security.workspace.trust.untrustedFiles": "open",
   "security.allowedUNCHosts": ["wsl.localhost"],
   "terminal.integrated.inheritEnv": false,
+  "terminal.integrated.defaultProfile.osx": "fish",
+  "terminal.integrated.defaultProfile.linux": "fish",
   "files.exclude": {
     "**/.git": false
   },
