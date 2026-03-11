@@ -30,8 +30,8 @@ if ! command -v devbox &>/dev/null; then
     curl -fsSL https://get.jetify.com/devbox | bash
 fi
 
-echo "==> Symlinking dotfiles..."
+echo "==> Running full bootstrap via task..."
 cd "$(dirname "$0")"
-stow fish git kitty devbox
+task bootstrap
 
 echo "==> Done! Restart your shell or run: exec fish"

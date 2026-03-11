@@ -1,2 +1,40 @@
+# macOS
 .DS_Store
+
+# Claude
 .claude/
+
+# SSH – commit aldrig dessa
+**/.ssh/id_*
+**/.ssh/id_*.*
+**/.ssh/known_hosts
+**/.ssh/authorized_keys
+
+# GPG
+**/.gnupg/
+
+# Credentials & tokens
+**/.netrc
+**/.npmrc
+**/.pypirc
+**/.aws/credentials
+**/.docker/config.json
+**/*_token
+**/*_secret
+**/*.pem
+**/*.key
+
+# Maskinspecifik git-konfiguration (skapas manuellt per maskin)
+**/config.work
+**/config.local
+
+# Shell-historik & maskinspecifikt tillstånd
+**/.bash_history
+**/.zsh_history
+**/.local/share/fish/fish_history
+**/.config/fish/fish_variables
+
+# Env-filer
+**/.env
+**/.env.*
+!**/.env.example

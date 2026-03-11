@@ -1,7 +1,7 @@
 version: "3"
 
 vars:
-  PACKAGES: fish git kitty devbox
+  PACKAGES: fish git kitty devbox yazi
   DOTFILES_DIR: "{{.ROOT_DIR}}"
   VSCODE_DIR: '{{if eq OS "darwin"}}{{.HOME}}/Library/Application Support/Code/User{{else}}{{.HOME}}/.config/Code/User{{end}}'
   UV_TOOLS: harlequin

@@ -11,3 +11,5 @@
 	autoSetupRemote = true
 [http]
 	postBuffer = 157286400
+[includeIf "gitdir:~/Documents/git/"]
+	path = ~/.config/git/config.work

@@ -1,0 +1,7 @@
+[opener]
+edit = [
+  { run = 'code "$1"', block = false },
+]
+terminal = [
+  { run = 'kitty --directory "$1"', orphan = true },
+]

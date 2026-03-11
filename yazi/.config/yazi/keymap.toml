@@ -1,0 +1,9 @@
+[[manager.prepend_keymap]]
+on = "t"
+run = "shell 'open -na kitty --args --directory \"$CWD\"' --orphan"
+desc = "Open terminal here"
+
+[[manager.prepend_keymap]]
+on = "c"
+run = "shell 'open -a \"Visual Studio Code\" \"$CWD\"' --orphan"
+desc = "Open current folder in VSCode"
